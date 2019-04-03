@@ -365,5 +365,262 @@ pyenv: remove /home/python/.pyenv/versions/3.6.3? y
 [python@localhost ~]$
 ```
 
-#### 1.3.4 使用 Pyenv 管理的指定 python 版本
+#### 1.3.4 使用 pyenv global 指定系统 python 环境
 
+&emsp;&emsp; 默认情况下 pyenv 显示的是系统默认的环境变量 2.7.5 版本，我们可以使用 global 选项  
+来指定我们想要 python 版本， 如图：
+```bash
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.3
+  3.6.8
+  3.7.3
+[python@localhost ~]$ python -V
+Python 2.7.5
+[python@localhost ~]$ pyenv global 3.6.8
+[python@localhost ~]$ pyenv versions
+  system
+  3.6.3
+* 3.6.8 (set by /home/python/.pyenv/version)
+  3.7.3
+[python@localhost ~]$ python -V
+Python 3.6.8
+[python@localhost ~]$
+```
+通过上面的演示，我们发现，使用 global 选项指定当前 python 版本是通过在 `.pyenv` 目录中  
+的 version 文件指定的，下面我们看一下这个文件:
+```bash
+[python@localhost ~]$ cd .pyenv/
+[python@localhost .pyenv]$ ll
+total 208
+drwxrwxr-x. 2 python python   4096 Apr  2 20:22 bin
+-rw-rw-r--. 1 python python  25848 Apr  2 20:22 CHANGELOG.md
+-rw-rw-r--. 1 python python   7522 Apr  2 20:22 COMMANDS.md
+drwxrwxr-x. 2 python python   4096 Apr  2 20:22 completions
+-rw-rw-r--. 1 python python   3390 Apr  2 20:22 CONDUCT.md
+drwxrwxr-x. 2 python python   4096 Apr  2 20:22 libexec
+-rw-rw-r--. 1 python python   1092 Apr  2 20:22 LICENSE
+-rw-rw-r--. 1 python python    406 Apr  2 20:22 Makefile
+drwxrwxr-x. 3 python python   4096 Apr  2 20:22 plugins
+drwxrwxr-x. 4 python python   4096 Apr  2 20:22 pyenv.d
+-rw-rw-r--. 1 python python  15752 Apr  2 20:22 README.md
+drwxrwxr-x. 2 python python   4096 Apr  3 10:38 shims
+drwxrwxr-x. 2 python python   4096 Apr  2 20:22 src
+-rw-rw-r--. 1 python python 104764 Apr  2 20:22 terminal_output.png
+drwxrwxr-x. 3 python python   4096 Apr  2 20:22 test
+-rw-rw-r--. 1 python python      6 Apr  3 14:55 version
+drwxrwxr-x. 5 python python   4096 Apr  2 20:43 versions
+[python@localhost .pyenv]$ cat version
+3.6.8
+[python@localhost .pyenv]$
+```
+通过上图的查看过程，发现 version 就是一个普通文本文件，内部指定了3.6.8这个编号，下面我  
+们将这个文件修改一下，3.6.8 修改为 3.6.3 ，或者把这个文件删除，看看当前的 python 环境有  
+什么变化，如图:
+```bash
+[python@localhost .pyenv]$ cd 
+[python@localhost ~]$ echo "3.6.3" > .pyenv/version
+[python@localhost ~]$ cat .pyenv/version
+3.6.3
+[python@localhost ~]$ pyenv versions
+  system
+* 3.6.3 (set by /home/python/.pyenv/version)
+  3.6.8
+  3.7.3
+[python@localhost ~]$ python -V
+Python 3.6.3
+[python@localhost ~]$ rm -rf .pyenv/version
+[python@localhost ~]$ cat .pyenv/version
+cat: .pyenv/version: No such file or directory
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.3
+  3.6.8
+  3.7.3
+[python@localhost ~]$ python -V
+Python 2.7.5
+[python@localhost ~]$
+```
+上图的演示过程充分揭示了 global 选项指定当前 python 版本的方法，没有 version 文件的情  
+况下，默认使用系统中自带的 python 版本， 有了version 文件后，使用 version 文件中指定的  
+python 版本。
+
+&emsp;&emsp; 之前对 global 的用法已经可以满足通常的使用场景，但是有的时候我们可以使用 global  
+的高级用法，我们看一下下面的执行过程，可以发现一些新的特性：  
+
+```bash
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.3
+  3.6.8
+  3.7.3
+[python@localhost ~]$ python -V
+Python 2.7.5
+[python@localhost ~]$ python2.7 -V
+Python 2.7.5
+[python@localhost ~]$ python3 -V
+pyenv: python3: command not found
+
+The `python3' command exists in these Python versions:
+  3.6.3
+  3.6.8
+  3.7.3
+
+[python@localhost ~]$ python3.6 -V
+pyenv: python3.6: command not found
+
+The `python3.6' command exists in these Python versions:
+  3.6.3
+  3.6.8
+
+[python@localhost ~]$ python3.6.3 -V
+bash: python3.6.3: command not found...
+[python@localhost ~]$
+```
+上图中没有设置 global 环境，系统默认为 python2.7.5 ，在命令行中执行 python 或者 python2.7   
+时，最终都使用的是python2.7.5 ; 当执行 python3 或者 python3.x 时，提示 pyenv 中有对应版本;  
+直接指定对应的系统版本时，若不在 version 文件中，则提示命令找不到，无法使用。因此我们可  
+以使用 global 同时定义多个 python3 系列，然后同时使用多个版本，如下图:  
+```bash
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.3
+  3.6.8
+  3.7.3
+[python@localhost ~]$ cat .pyenv/version
+cat: .pyenv/version: No such file or directory
+[python@localhost ~]$ pyenv global 3.6.8 3.6.3 3.7.3
+[python@localhost ~]$ pyenv versions
+  system
+* 3.6.3 (set by /home/python/.pyenv/version)
+* 3.6.8 (set by /home/python/.pyenv/version)
+* 3.7.3 (set by /home/python/.pyenv/version)
+[python@localhost ~]$ python -V
+Python 3.6.8
+[python@localhost ~]$ python3 -V
+Python 3.6.8
+[python@localhost ~]$ python3.6 -V
+Python 3.6.8
+[python@localhost ~]$ python3.7 -V
+Python 3.7.3
+[python@localhost ~]$
+```
+上图中我们连续设置了3个 python 版本，发现他们同时生效，但是最终python命令生效的版本  
+是 3.6.8 即我们 global 变量后第一个 python版本 3.6.8 ； python3 和 python3.6 都为 3.6.8；如果  
+直接执行python 3.7，则使用的是 python3.7.3；高级用法大家了解一下就好，尽量不要把自己的  
+python 环境搞得太复杂。
+
+
+
+#### 1.3.5 使用 pyenv shell 指定系统 python 环境
+&emsp;&emsp; 除了使用上一小节中的 global 选项外，我们还可以通过 shell 选项设置当前系统的环境变量，  
+和 global 用法相仿，下面我们演示一下:
+```bash
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.3
+  3.6.8
+  3.7.3
+[python@localhost ~]$ pyenv shell 3.6.3
+[python@localhost ~]$ pyenv versions
+  system
+* 3.6.3 (set by PYENV_VERSION environment variable)
+  3.6.8
+  3.7.3
+[python@localhost ~]$ 
+[python@localhost ~]$ echo  $PYENV_VERSION
+3.6.3
+[python@localhost ~]$ PYENV_VERSION=3.6.8
+[python@localhost ~]$
+[python@localhost ~]$ pyenv versions
+  system
+  3.6.3
+* 3.6.8 (set by PYENV_VERSION environment variable)
+  3.7.3
+[python@localhost ~]$ unset PYENV_VERSION
+[python@localhost ~]$ 
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.3
+  3.6.8
+  3.7.3
+[python@localhost ~]$
+[python@localhost ~]$ export PYENV_VERSION=3.7.3
+[python@localhost ~]$ pyenv versions
+  system
+  3.6.3
+  3.6.8
+* 3.7.3 (set by PYENV_VERSION environment variable)
+[python@localhost ~]$
+```
+通过上图的演示过程，我们可以使用 shell 选项指定当前系统的 python 版本， 我们发现 shell 选项  
+方式和 global 不同，他将 python 的版本信息放到当前 shell 环境变量 PYENV_VERSION 中， 我们  
+可以直接操作该变量，通过改变他的值实现 python 不同版本的切换，也可以直接使用 Linux 中的  
+unset 命令删除这个变量。删除后，pyenv 恢复到 global 所指定的 python 版本，这也说明 shell 选  
+项设置的 python 版本优先级高于 global 设置的。虽然大家了解了 shell 选项的实现原理，但是还是  
+建议大家使用 pyenv 命令来维护系统中的 python 版本，不建议直接操作对应的系统变量。比如，我  
+们可以使用 --unset 来取消 shell 选项设置的 python 版本，如图：
+```bash
+[python@localhost ~]$ pyenv global 3.7.3
+[python@localhost ~]$ 
+[python@localhost ~]$ pyenv versions
+  system
+  3.6.3
+  3.6.8
+* 3.7.3 (set by /home/python/.pyenv/version)
+[python@localhost ~]$ pyenv shell 3.6.8
+[python@localhost ~]$ 
+[python@localhost ~]$ pyenv versions
+  system
+  3.6.3
+* 3.6.8 (set by PYENV_VERSION environment variable)
+  3.7.3
+[python@localhost ~]$ pyenv shell --unset
+[python@localhost ~]$ 
+[python@localhost ~]$ pyenv versions
+  system
+  3.6.3
+  3.6.8
+* 3.7.3 (set by /home/python/.pyenv/version)
+[python@localhost ~]$
+```
+
+&emsp;&emsp; shell 选项和 global 选项类似， 也可以同时制定多个 python 版本， 具体实现是在 `PYENV_VERSION`   
+环境变量中用 `:` 分隔多个 Python 版本号，如下图:
+```bash
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.3
+  3.6.8
+  3.7.3
+[python@localhost ~]$ pyenv shell 3.6.3 3.6.8 3.7.3
+[python@localhost ~]$
+[python@localhost ~]$ pyenv versions
+  system
+* 3.6.3 (set by PYENV_VERSION environment variable)
+* 3.6.8 (set by PYENV_VERSION environment variable)
+* 3.7.3 (set by PYENV_VERSION environment variable)
+[python@localhost ~]$
+[python@localhost ~]$ echo $PYENV_VERSION
+3.6.3:3.6.8:3.7.3
+[python@localhost ~]$ 
+[python@localhost ~]$ python -V
+Python 3.6.3
+[python@localhost ~]$ python3.6 -V
+Python 3.6.3
+[python@localhost ~]$ 
+[python@localhost ~]$ python3.7 -V
+Python 3.7.3
+[python@localhost ~]$ 
+[python@localhost ~]$ pyenv shell --unset
+[python@localhost ~]$ 
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.3
+  3.6.8
+  3.7.3
+[python@localhost ~]$
+```
+
+
+#### 1.3.6 使用 pyenv local 指定系统 python 环境
