@@ -42,7 +42,7 @@ drwxrwxr-x. 11 python python 4096 Apr  2 16:13 .pyenv
 [python@localhost ~]$ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile
 [python@localhost ~]$
 [python@localhost ~]$ echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
-[python@localhost ~]$ echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bash_profile 
+[python@localhost ~]$ echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bashrc
 [python@localhost ~]$ pyenv
 bash: pyenv: command not found...
 [python@localhost ~]$
@@ -623,4 +623,92 @@ Python 3.7.3
 ```
 
 
-#### 1.3.6 使用 pyenv local 指定系统 python 环境
+#### 1.3.6 使用 pyenv local 指定系统 python 环境  
+&emsp;&emsp; 下面给大家介绍最后一个可以改变系统环境变量的 pyenv 选项 local ，该选项可以指定当前路径和  
+其子目录下的 Python 版本，即在指定目录内执行 python 时才有效的 python 版本。演示如下:  
+```bash
+[python@localhost ~]$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+[python@localhost ~]$ mkdir MyProject
+[python@localhost ~]$ cd MyProject/
+[python@localhost MyProject]$ 
+[python@localhost MyProject]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.3
+  3.6.8
+  3.7.3
+[python@localhost MyProject]$ pyenv local 3.6.8
+[python@localhost MyProject]$
+[python@localhost MyProject]$ pyenv versions
+  system
+  3.6.3
+* 3.6.8 (set by /home/python/MyProject/.python-version)
+  3.7.3
+[python@localhost MyProject]$
+[python@localhost MyProject]$ ls -al
+total 12
+drwxrwxr-x.  2 python python 4096 Apr  4 10:18 .
+drwx------. 18 python python 4096 Apr  4 10:17 ..
+-rw-rw-r--.  1 python python    6 Apr  4 10:18 .python-version
+[python@localhost MyProject]$
+[python@localhost MyProject]$ cat .python-version 
+3.6.8
+[python@localhost MyProject]$
+[python@localhost MyProject]$ cd
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.3
+  3.6.8
+  3.7.3
+[python@localhost ~]$
+```
+
+现在我们演示一下 global shell local 三种选项同时使用，观察一下哪种的优先级最高:
+```bash
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.3
+  3.6.8
+  3.7.3
+[python@localhost ~]$ pyenv global 3.6.3
+[python@localhost ~]$ pyenv versions
+  system
+* 3.6.3 (set by /home/python/.pyenv/version)
+  3.6.8
+  3.7.3
+[python@localhost ~]$ 
+[python@localhost ~]$ pyenv shell 3.6.8
+[python@localhost ~]$ 
+[python@localhost ~]$ pyenv versions
+  system
+  3.6.3
+* 3.6.8 (set by PYENV_VERSION environment variable)
+  3.7.3
+[python@localhost ~]$ cd MyProject/
+[python@localhost MyProject]$ pyenv local 3.7.3
+[python@localhost MyProject]$ 
+[python@localhost MyProject]$ pyenv versions
+  system
+  3.6.3
+* 3.6.8 (set by PYENV_VERSION environment variable)
+  3.7.3
+[python@localhost MyProject]$ pyenv shell --unset
+[python@localhost MyProject]$ pyenv versions
+  system
+  3.6.3
+  3.6.8
+* 3.7.3 (set by /home/python/MyProject/.python-version)
+[python@localhost MyProject]$ cd 
+[python@localhost ~]$ pyenv versions
+  system
+* 3.6.3 (set by /home/python/.pyenv/version)
+  3.6.8
+  3.7.3
+[python@localhost ~]$
+```
+通过上面的演示，我们发现 shell 选项定义的 python 版本优先级最高，他会覆盖 local 选项指定的  
+python 版本，然后 local 选项的优先级高于 global 选项的优先级。
+
+下面我们可以在 pycharm 中直接使用安装在 .pyenv/versions 中安装的各种 python 版本。  
+下一节将给大家介绍 python 虚拟环境目录的知识。
+
