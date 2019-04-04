@@ -39,14 +39,14 @@ Resolving deltas: 100% (11379/11379), done.
 [python@localhost ~]$ ls -adl .pyenv
 drwxrwxr-x. 11 python python 4096 Apr  2 16:13 .pyenv
 [python@localhost ~]$ 
-[python@localhost ~]$ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile
+[python@localhost ~]$ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
 [python@localhost ~]$
-[python@localhost ~]$ echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
+[python@localhost ~]$ echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
 [python@localhost ~]$ echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bashrc
 [python@localhost ~]$ pyenv
 bash: pyenv: command not found...
 [python@localhost ~]$
-[python@localhost ~]$ source .bash_profile 
+[python@localhost ~]$ source .bashrc 
 [python@localhost ~]$ pyenv
 pyenv 1.2.9-35-gb610909
 Usage: pyenv <command> [<args>]
@@ -246,7 +246,42 @@ Installed Python-3.6.3 to /home/python/.pyenv/versions/3.6.3
 ~
 [python@localhost ~]$
 ```
->上图中顺利完成 python3.6.3 这个版本的安装工作。
+上图中顺利完成 python3.6.3 这个版本的安装工作。但是有的时候网络不好，下载源码包比较慢  
+这时我们可以在 .pyenv 目录内创建 cache 文件夹，然后使用内网的 ftp 服务器下载 指定的 python  
+版本，然后再使用 pyenv install 安装，这样可以节省时间，如图:
+```bash
+[python@localhost ~]$ cd .pyenv/
+[python@localhost .pyenv]$ ls
+bin           completions  LICENSE   pyenv.d    src                  versions
+CHANGELOG.md  CONDUCT.md   Makefile  README.md  terminal_output.png
+COMMANDS.md   libexec      plugins   shims      test
+[python@localhost .pyenv]$ 
+[python@localhost .pyenv]$ mkdir cache
+[python@localhost .pyenv]$ cd cache/
+[python@localhost cache]$ 
+[python@localhost cache]$ lftp 172.20.0.1/pub/software
+cd ok, cwd=/pub/software
+lftp 172.20.0.1:/pub/software> ls
+-rw-r--r--    1 0        0        15324736 Mar 18 00:57 Python-3.5.7.tar.xz
+-rw-r--r--    1 0        0        22673115 Oct 03  2017 Python-3.6.3.tgz
+-rw-r--r--    1 0        0        17212420 Dec 24 03:02 Python-3.6.8.tar.xz
+-rw-r--r--    1 0        0        17108364 Mar 25 20:59 Python-3.7.3.tar.xz
+-rw-r--r--    1 0        0        332489780 Apr 03 12:38 pycharm-community-2019.1.1.tar.gz
+lftp 172.20.0.1:/pub/software> mget Python*
+72318635 bytes transferred in 1 second (63.98M/s)         
+Total 4 files transferred
+lftp 172.20.0.1:/pub/software> exit
+[python@localhost cache]$ ll
+total 70632
+-rw-rw-r--. 1 python python 15324736 Mar 18 08:57 Python-3.5.7.tar.xz
+-rw-rw-r--. 1 python python 22673115 Oct  3  2017 Python-3.6.3.tgz
+-rw-rw-r--. 1 python python 17212420 Dec 24 11:02 Python-3.6.8.tar.xz
+-rw-rw-r--. 1 python python 17108364 Mar 26 04:59 Python-3.7.3.tar.xz
+[python@localhost cache]$ cd
+[python@localhost ~]$ 
+```
+完成上面的操作后，再次使用 pyenv install 命令安装对应的 python 版本时，会跳过下载软  
+件包的过程，直接使用 cache 路径下的源码包。
 
 
 
