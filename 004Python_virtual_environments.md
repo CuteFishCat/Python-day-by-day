@@ -757,7 +757,7 @@ hash: hash table empty
 ```
 上图我将之前安装的 python3.7.3 配置到 PATH 环境中使之生效。然后在 python 用户家目  
 录创建了 project 文件夹，并在该文件夹下创建两个项目目录，分别是 webproject 和  
-aiprojec。然后使用 pyven 命令在 webproject 下创建了 webenv 虚拟环境目录，创建该目录  
+aiprojec。然后使用 pyvenv 命令在 webproject 下创建了 webenv 虚拟环境目录，创建该目录  
 时，提示 pyvenv命令已经废弃，建议我们使用 python3.7 -m venv 方式创建虚拟环境。最  
 后我们根据建议，使用 python3.7 -m 方式在 aiproject 项目下创建了 aienv 虚拟环境目录。  
 和 virtualenv 使用方式一样，使用某个环境时 source 对应虚拟环境 bin 目录下的 activate 文  
