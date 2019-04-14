@@ -1072,22 +1072,22 @@ WARNING: All illegal access operations will be denied in a future release
 &emsp;&emsp;下面我们通过图片给大家介绍一下常用的选项和功能，如下：  
 
 1. 启动画面  
-![启动画面](pycharm01.png)
+![启动画面](https://raw.githubusercontent.com/CuteFishCat/Python-stars/master/resource/image/pycharm01.png)
 
 2. 项目选择页面  
-![项目选择页面](pycharm02.png)
+![项目选择页面](https://raw.githubusercontent.com/CuteFishCat/Python-stars/master/resource/image/pycharm02.png)
 
 3. 点击设置Configure，创建一个快捷方程式，方便下次启动，不用再手动创建桌面图标  
-![创建快捷方程式](pycharm03.png)
+![创建快捷方程式](https://raw.githubusercontent.com/CuteFishCat/Python-stars/master/resource/image/pycharm03.png)
 
 4. 在项目选择页面，可以选择通过版本管理工具下载对应的项目  
-![版本管理工具创建项目](pycharm04.png)
+![版本管理工具创建项目](https://raw.githubusercontent.com/CuteFishCat/Python-stars/master/resource/image/pycharm04.png)
 
 5. 在项目选择页面，可以选择 Open 打开本地文件系统中保存的 python 项目  
-![打开本地的项目](pycharm05.png)
+![打开本地的项目](https://raw.githubusercontent.com/CuteFishCat/Python-stars/master/resource/image/pycharm05.png)
 
 6. 在项目选择页面，点击 Create New Project 可以创建一个新项目  
-![创建新项目](pycharm06.png)
+![创建新项目](https://raw.githubusercontent.com/CuteFishCat/Python-stars/master/resource/image/pycharm06.png)
 
 6.1. 点击创建项目后进行项目设置:  
 Location: 填写项目在文件系统中的路径，最后是项目文件夹名称，如图我创建了 aiproject 项目  
@@ -1097,7 +1097,7 @@ New environment using: 选择Virtualenv
 &emsp;&emsp;&emsp;&emsp;Inherit global site-packages:&ensp;不勾选  
 &emsp;&emsp;&emsp;&emsp;Make available to all projects: 不勾选  
 然后点击 Create 创建即可项目  
-![创建新项目设置页面](pycharm061.png)
+![创建新项目设置页面](https://raw.githubusercontent.com/CuteFishCat/Python-stars/master/resource/image/pycharm061.png)
 
 6.2. 上图是使用新创建的虚拟环境，我们也可以使用系统中已创建过的虚拟环境来创建项目  
 Location: 填写项目在文件系统中的路径，最后是项目文件夹名称，如图我创建了 aiproject 项目  
@@ -1105,7 +1105,7 @@ New environment using: 选择 Existing Interpreter
 &emsp;&emsp;Interpreter: 要指定系统中的一个具体的虚拟环境的路径   
 然后点击 Create 创建即可项目  
 `*** 一般建议使用 6.1 中的方式，每个项目单独创建一个虚拟环境 ***`     
-![创建新项目设置页面](pycharm062.png)
+![创建新项目设置页面](https://raw.githubusercontent.com/CuteFishCat/Python-stars/master/resource/image/pycharm062.png)
 
 
 7. 项目主界面  
@@ -1113,4 +1113,4 @@ New environment using: 选择 Existing Interpreter
 左面是项目文件显示窗口: 可以创建删除项目文件，了解项目目录结构等  
 右面是代码编辑窗口: 点击项目文件显示窗口中的具体文件，即可再右面的编辑区域进行代码文件的编辑  
 下面是代码运行标准交互窗口: 在代码编辑窗口或者项目显示窗口选中具体的 python 文件后鼠标右键点击运行即可
-![创建新项目设置页面](pycharm07.png)
+![创建新项目设置页面](https://raw.githubusercontent.com/CuteFishCat/Python-stars/master/resource/image/pycharm07.png)
