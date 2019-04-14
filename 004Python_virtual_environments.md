@@ -763,3 +763,354 @@ aiprojec。然后使用 pyvenv 命令在 webproject 下创建了 webenv 虚拟�
 和 virtualenv 使用方式一样，使用某个环境时 source 对应虚拟环境 bin 目录下的 activate 文  
 件即可，退出时使用 deactivate 命令，需要删除虚拟环境目录时，直接删除虚拟环境目录即  
 可。
+
+
+#### 1.4.5  使用 pyenv-virtualenv 插件
+&emsp;&emsp; 第一章第三节我们讲解过 pyenv ，当时我们使用 pyenv 完成了不同 python 版本的安装  
+和环境的切换。但是当时并没有解决虚拟环境的问题，我们可以使用上面讲解的 virtualenv  
+和 venv 完成虚拟目录创建管理的工作。为了方便使用，pyenv 提供了一个 pyenv-virtualenv  
+的插件,可以替代 virtualenv 或者 venv 完成虚拟目录的管理工作。下面我们演示一下这个插  
+件的安装和基本使用:
+```bash
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.5.7
+  3.6.8
+[python@localhost ~]$
+[python@localhost ~]$ git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
+Cloning into '/home/python/.pyenv/plugins/pyenv-virtualenv'...
+remote: Enumerating objects: 30, done.
+remote: Counting objects: 100% (30/30), done.
+remote: Compressing objects: 100% (24/24), done.
+remote: Total 2064 (delta 14), reused 13 (delta 6), pack-reused 2034
+Receiving objects: 100% (2064/2064), 592.75 KiB | 296.00 KiB/s, done.
+Resolving deltas: 100% (1403/1403), done.
+[python@localhost ~]$ 
+[python@localhost ~]$ echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
+[python@localhost ~]$ 
+[python@localhost ~]$ source .bashrc 
+[python@localhost ~]$ 
+[python@localhost ~]$ pyenv virtualenv 3.6.8 spenv
+Looking in links: /tmp/tmpi3ljzthj
+Requirement already satisfied: setuptools in /home/python/.pyenv/versions/3.6.8/envs/spenv/lib/python3.6/site-packages (40.6.2)
+Requirement already satisfied: pip in /home/python/.pyenv/versions/3.6.8/envs/spenv/lib/python3.6/site-packages (18.1)
+[python@localhost ~]$ 
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.5.7
+  3.6.8
+  3.6.8/envs/spenv
+  spenv
+[python@localhost ~]$ cd .pyenv/versions/
+[python@localhost versions]$ ll
+total 8
+drwxr-xr-x. 6 python python 4096 Apr 11 18:27 3.5.7
+drwxr-xr-x. 7 python python 4096 Apr 11 18:31 3.6.8
+lrwxrwxrwx. 1 python python   45 Apr 11 18:31 spenv -> /home/python/.pyenv/versions/3.6.8/envs/spenv
+[python@localhost versions]$ cd
+[python@localhost ~]$
+[python@localhost ~]$ python -V
+Python 2.7.5
+[python@localhost ~]$
+[python@localhost ~]$ pyenv activate spenv
+pyenv-virtualenv: prompt changing will be removed from future release. configure ‘export PYENV_VIRTUALENV_DISABLE_PROMPT=1’ to simulate the behavior.
+(spenv) [python@localhost ~]$
+(spenv) [python@localhost ~]$ pyenv versions
+  system
+  3.5.7
+  3.6.8
+  3.6.8/envs/spenv
+* spenv (set by PYENV_VERSION environment variable)
+(spenv) [python@localhost ~]$
+(spenv) [python@localhost ~]$ pyenv virtualenvs
+  3.6.8/envs/spenv (created from /home/python/.pyenv/versions/3.6.8)
+* spenv (created from /home/python/.pyenv/versions/3.6.8)
+(spenv) [python@localhost ~]$
+(spenv) [python@localhost ~]$ 
+(spenv) [python@localhost ~]$ python -V
+Python 3.6.8
+(spenv) [python@localhost ~]$ pip install jupyter
+Collecting jupyter
+  Using cached https://files.pythonhosted.org/packages/83/df/0f5dd132200728a86190397e1ea87cd76244e42d39ec5e88efd25b2abd7e/jupyter-1.0.0-py2.py3-none-any.whl
+  .
+  .省略安装信息。。。。。。
+  .
+  Running setup.py install for prometheus-client ... done
+  Running setup.py install for tornado ... done
+  Running setup.py install for backcall ... done
+  Running setup.py install for pandocfilters ... done
+  Running setup.py install for pyrsistent ... done
+Successfully installed MarkupSafe-1.1.1 Send2Trash-1.5.0 attrs-19.1.0 backcall-0.1.0 bleach-3.1.0 decorator-4.4.0 defusedxml-0.5.0 entrypoints-0.3 ipykernel-5.1.0 ipython-7.4.0 ipython-genutils-0.2.0 ipywidgets-7.4.2 jedi-0.13.3 jinja2-2.10.1 jsonschema-3.0.1 jupyter-1.0.0 jupyter-client-5.2.4 jupyter-console-6.0.0 jupyter-core-4.4.0 mistune-0.8.4 nbconvert-5.4.1 nbformat-4.4.0 notebook-5.7.8 pandocfilters-1.4.2 parso-0.4.0 pexpect-4.7.0 pickleshare-0.7.5 prometheus-client-0.6.0 prompt-toolkit-2.0.9 ptyprocess-0.6.0 pygments-2.3.1 pyrsistent-0.14.11 python-dateutil-2.8.0 pyzmq-18.0.1 qtconsole-4.4.3 six-1.12.0 terminado-0.8.2 testpath-0.4.2 tornado-6.0.2 traitlets-4.3.2 wcwidth-0.1.7 webencodings-0.5.1 widgetsnbextension-3.4.2
+You are using pip version 18.1, however version 19.0.3 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+(spenv) [python@localhost ~]$ 
+(spenv) [python@localhost ~]$ 
+(spenv) [python@localhost ~]$ jupyter notebook
+[I 18:41:41.192 NotebookApp] Serving notebooks from local directory: /home/python
+[I 18:41:41.192 NotebookApp] The Jupyter Notebook is running at:
+[I 18:41:41.192 NotebookApp] http://localhost:8888/?token=c36aa6e3d3928b8c4bdbe9bdb5f6e8e631290808d49fbe60
+[I 18:41:41.192 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 18:41:41.234 NotebookApp] 
+    
+    To access the notebook, open this file in a browser:
+        file:///run/user/1001/jupyter/nbserver-110650-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8888/?token=c36aa6e3d3928b8c4bdbe9bdb5f6e8e631290808d49fbe60
+^C[I 18:41:57.029 NotebookApp] interrupted
+Serving notebooks from local directory: /home/python
+0 active kernels
+The Jupyter Notebook is running at:
+http://localhost:8888/?token=c36aa6e3d3928b8c4bdbe9bdb5f6e8e631290808d49fbe60
+Shutdown this notebook server (y/[n])? y
+[C 18:41:59.773 NotebookApp] Shutdown confirmed
+[I 18:41:59.774 NotebookApp] Shutting down 0 kernels
+(spenv) [python@localhost ~]$ pyenv deactivate
+[python@localhost ~]$
+[python@localhost ~]$
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.5.7
+  3.6.8
+  3.6.8/envs/spenv
+  spenv
+[python@localhost ~]$
+[python@localhost ~]$ jupyter notebook
+pyenv: jupyter: command not found
+
+The ’jupyter‘ command exists in these Python versions:
+  3.6.8/envs/spenv
+  spenv
+
+[python@localhost ~]$
+[python@localhost ~]$
+```
+上图中我们先在 pyenv 中安装了 pyenv-virtualenv，然后使用 pyenv 的 virtualenv 选项创  
+建一个 python 版本为 3.6.8 的虚拟环境 spenv。根据 pyenv 的提示信息，我们发现新创  
+建的虚拟环境 spenv 的实际存放路径为 pyenv 的 versions 目录下的具体版本的 envs 路径  
+下。之后我们可以使用 pyenv 的 activate 选项来生效一个我们制定的具体虚拟环境。上  
+图中我们可以使用 pyenv versions 查看当前所使用的虚拟环境，也可以使用 pyenv virtualenvs  
+查看。虚拟环境的生效范围为当前 shell ，最后要想退出虚拟环境，我们需要使用 pyenv  
+的 deactivate 选项完成，或者直接退出当前 shell 即可。 pyenv 的 virtualenv 插件除了提  
+供专有的管理命令选项外，我们还可以使用之前 pyenv 的 global local shell 的环境指定方  
+式来指定当前生效的 python 版本或者虚拟环境。pyenv 的 activate 选项的实际效果和 pyenv  
+的 shell 选项功能一样。
+
+&emsp;&emsp;上面的演示步骤没有讲解删除虚拟环境的方法，下面我们演示一下:
+```bash
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.5.7
+  3.6.8
+  3.6.8/envs/spenv
+  spenv
+[python@localhost ~]$
+[python@localhost ~]$ pyenv virtualenv-delete spenv
+pyenv-virtualenv: remove /home/python/.pyenv/versions/3.6.8/envs/spenv? y
+[python@localhost ~]$
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.5.7
+  3.6.8
+[python@localhost ~]$ pyenv virtualenv 3.5.7 aienv
+Requirement already satisfied: setuptools in /home/python/.pyenv/versions/3.5.7/envs/aienv/lib/python3.5/site-packages
+Requirement already satisfied: pip in /home/python/.pyenv/versions/3.5.7/envs/aienv/lib/python3.5/site-packages
+[python@localhost ~]$ pyenv virtualenv 3.6.8 webenv
+Looking in links: /tmp/tmpat6xc4mn
+Requirement already satisfied: setuptools in /home/python/.pyenv/versions/3.6.8/envs/webenv/lib/python3.6/site-packages (40.6.2)
+Requirement already satisfied: pip in /home/python/.pyenv/versions/3.6.8/envs/webenv/lib/python3.6/site-packages (18.1)
+[python@localhost ~]$
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.5.7
+  3.5.7/envs/aienv
+  3.6.8
+  3.6.8/envs/webenv
+  aienv
+  webenv
+[python@localhost ~]$
+[python@localhost ~]$ pyenv virtualenvs
+  3.5.7/envs/aienv (created from /home/python/.pyenv/versions/3.5.7)
+  3.6.8/envs/webenv (created from /home/python/.pyenv/versions/3.6.8)
+  aienv (created from /home/python/.pyenv/versions/3.5.7)
+  webenv (created from /home/python/.pyenv/versions/3.6.8)
+[python@localhost ~]$ 
+[python@localhost ~]$ pyenv uninstall 3.5.7
+pyenv-virtualenv: remove /home/python/.pyenv/versions/3.5.7/envs/aienv? y
+pyenv: remove /home/python/.pyenv/versions/3.5.7? y
+[python@localhost ~]$ 
+[python@localhost ~]$
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.8
+  3.6.8/envs/webenv
+  webenv
+[python@localhost ~]$ pyenv virtualenvs
+  3.6.8/envs/webenv (created from /home/python/.pyenv/versions/3.6.8)
+  webenv (created from /home/python/.pyenv/versions/3.6.8)
+[python@localhost ~]$ 
+[python@localhost ~]$
+[python@localhost ~]$ pyenv uninstall webenv
+pyenv-virtualenv: remove /home/python/.pyenv/versions/3.6.8/envs/webenv? y
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.8
+[python@localhost ~]$ pyenv virtualenvs
+[python@localhost ~]$ 
+[python@localhost ~]$ 
+```
+
+上图我们演示了使用 pyenv 的 virtualenv-delete 选项完成删除虚拟环境的操作，之后又使用了  
+uninstall 选项进行删除，由于虚拟环境创建的路径是在具体的 python 版本目录下，所有不建议  
+直接删除指定的 python 版本，但是可以直接使用 pyenv uninstall 删除对应的虚拟目录。
+
+
+&emsp;&emsp; pyenv-virtualenv 插件底层对虚拟环境的管理是通过 python 的 venv 模块实现的，但是python3.3 之前的版本没有该模块，所以使用 virtualenv 模块虚拟环境的管理工作。
+```bash
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.8
+[python@localhost ~]$
+[python@localhost ~]$ pyenv virtualenv 3.6.8 webenv
+Looking in links: /tmp/tmpkdi7_a4q
+Requirement already satisfied: setuptools in /home/python/.pyenv/versions/3.6.8/envs/webenv/lib/python3.6/site-packages (40.6.2)
+Requirement already satisfied: pip in /home/python/.pyenv/versions/3.6.8/envs/webenv/lib/python3.6/site-packages (18.1)
+[python@localhost ~]$
+[python@localhost ~]$
+[python@localhost ~]$ pyenv virtualenv system aienv
+  No LICENSE.txt / LICENSE found in source
+New python executable in /home/python/.pyenv/versions/aienv/bin/python2
+Also creating executable in /home/python/.pyenv/versions/aienv/bin/python
+Installing setuptools, pip, wheel...
+done.
+Installing pip from https://bootstrap.pypa.io/get-pip.py...
+DEPRECATION: Python 2.7 will reach the end of its life on January 1st, 2020. Please upgrade your Python as Python 2.7 won’t be maintained after that date. A future version of pip will drop support for Python 2.7.
+Collecting pip
+  Downloading https://files.pythonhosted.org/packages/d8/f3/413bab4ff08e1fc4828dfc59996d721917df8e8583ea85385d51125dceff/pip-19.0.3-py2.py3-none-any.whl (1.4MB)
+    100% |████████████████████████████████| 1.4MB 7.6MB/s 
+Installing collected packages: pip
+  Found existing installation: pip 19.0.3
+    Uninstalling pip-19.0.3:
+      Successfully uninstalled pip-19.0.3
+Successfully installed pip-19.0.3
+[python@localhost ~]$ 
+[python@localhost ~]$
+[python@localhost ~]$ pyenv versions
+* system (set by /home/python/.pyenv/version)
+  3.6.8
+  3.6.8/envs/webenv
+  aienv
+  webenv
+[python@localhost ~]$
+[python@localhost ~]$ cd .pyenv/versions/webenv/
+[python@localhost webenv]$ ll
+total 16
+drwxrwxr-x. 2 python python 4096 Apr 12 11:37 bin
+drwxrwxr-x. 2 python python 4096 Apr 12 11:37 include
+drwxrwxr-x. 3 python python 4096 Apr 12 11:37 lib
+lrwxrwxrwx. 1 python python    3 Apr 12 11:37 lib64 -> lib
+-rw-rw-r--. 1 python python   99 Apr 12 11:37 pyvenv.cfg
+[python@localhost webenv]$ 
+[python@localhost webenv]$ cd
+[python@localhost ~]$ 
+[python@localhost ~]$ cd .pyenv/versions/aienv/
+[python@localhost aienv]$ ll
+total 12
+lrwxrwxrwx. 1 python python   34 Apr 12 11:39 aienv -> /home/python/.pyenv/versions/aienv
+drwxrwxr-x. 2 python python 4096 Apr 12 11:39 bin
+drwxrwxr-x. 2 python python 4096 Apr 12 11:39 include
+drwxrwxr-x. 3 python python 4096 Apr 12 11:39 lib
+lrwxrwxrwx. 1 python python    3 Apr 12 11:39 lib64 -> lib
+[python@localhost aienv]$ 
+[python@localhost aienv]$ cd
+[python@localhost ~]$ 
+[python@localhost ~]$
+```
+上图中我们分别创建了 python2.7 和 python3.6 版本的虚拟环境，发现对应目录下的结构不一样，  
+python3.6 版本的虚拟环境内容有 pyven配置文件，证明是使用 venv 模块创建的该虚拟环境。 
+
+#### 1.4.6  Pycharm 中虚拟环境的管理
+
+&emsp;&emsp;Pycharm 是 python 软件开发的集成开发环境，他具备 python 项目创建管理、python 解析器  
+和虚拟环境管理功能；作为 python 代码编辑器，他具备代码高亮，语法提示，错误提示，代码补  
+全等功能，方便程序员快速高效的编写项目；作为调试环境，方便运行、测试、debug程序；内含  
+git、svn 等版本控制客户端，方便项目代码管理，是广大 Python 程序员首选的 IDE。
+
+&emsp;&emsp;下面我们集中介绍一下 Pycharm 的项目创建管理与 python 虚拟环境的设置功能。在前几节中  
+我们已经安装过了 pycharm 这个工具，今天我们再来操作复习一遍。首先我们从 pycharm 官网下  
+载 Linux 版的压缩包，然后解压到一个软件安装的路径下。Pycharm 是用 Java 开发出来的图形化  
+集成开发工具，压缩包内包含 Java 运行环境，因此不需要提前安装 Java 运行环境就可以直接运行  
+在它 bin 目录内的启动程序 pycharm.sh。
+
+```bash
+[python@localhost ~]$ ls
+Desktop    Music      project                            Templates
+Documents  myproject  Public                             Videos
+Downloads  Pictures   pycharm-community-2019.1.1.tar.gz
+[python@localhost ~]$ mkdir software
+[python@localhost ~]$ tar xf pycharm-community-2019.1.1.tar.gz -C software/
+[python@localhost ~]$
+[python@localhost ~]$ ls
+Desktop    Music      project                            software
+Documents  myproject  Public                             Templates
+Downloads  Pictures   pycharm-community-2019.1.1.tar.gz  Videos
+[python@localhost ~]$
+[python@localhost ~]$ cd software/
+[python@localhost software]$ 
+[python@localhost software]$ mv pycharm-community-2019.1.1 pycharm
+[python@localhost software]$ 
+[python@localhost software]$ cd pycharm/bin/
+[python@localhost bin]$ ./pycharm.sh 
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.intellij.ide.ClassUtilCore to field sun.net.www.protocol.jar.JarFileFactory.fileCache
+WARNING: Please consider reporting this to the maintainers of com.intellij.ide.ClassUtilCore
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+```
+上图我们又演示了 pycharm 的安装过程并在 shell 终端中启动了 pycharm。
+
+&emsp;&emsp;下面我们通过图片给大家介绍一下常用的选项和功能，如下：  
+
+1. 启动画面  
+![启动画面](pycharm01.png)
+
+2. 项目选择页面  
+![项目选择页面](pycharm02.png)
+
+3. 点击设置Configure，创建一个快捷方程式，方便下次启动，不用再手动创建桌面图标  
+![创建快捷方程式](pycharm03.png)
+
+4. 在项目选择页面，可以选择通过版本管理工具下载对应的项目  
+![版本管理工具创建项目](pycharm04.png)
+
+5. 在项目选择页面，可以选择 Open 打开本地文件系统中保存的 python 项目  
+![打开本地的项目](pycharm05.png)
+
+6. 在项目选择页面，点击 Create New Project 可以创建一个新项目  
+![创建新项目](pycharm06.png)
+
+6.1. 点击创建项目后进行项目设置:  
+Location: 填写项目在文件系统中的路径，最后是项目文件夹名称，如图我创建了 aiproject 项目  
+New environment using: 选择Virtualenv  
+&emsp;&emsp;Location: 默认的就可以，在项目文件夹内  
+&emsp;&emsp;Base interpreter: 要指定系统中的一个具体的 Python 版本，不要写成虚拟环境的路径  
+&emsp;&emsp;&emsp;&emsp;Inherit global site-packages:&ensp;不勾选  
+&emsp;&emsp;&emsp;&emsp;Make available to all projects: 不勾选  
+然后点击 Create 创建即可项目  
+![创建新项目设置页面](pycharm061.png)
+
+6.2. 上图是使用新创建的虚拟环境，我们也可以使用系统中已创建过的虚拟环境来创建项目  
+Location: 填写项目在文件系统中的路径，最后是项目文件夹名称，如图我创建了 aiproject 项目  
+New environment using: 选择 Existing Interpreter  
+&emsp;&emsp;Interpreter: 要指定系统中的一个具体的虚拟环境的路径   
+然后点击 Create 创建即可项目  
+`*** 一般建议使用 6.1 中的方式，每个项目单独创建一个虚拟环境 ***`     
+![创建新项目设置页面](pycharm062.png)
+
+
+7. 项目主界面  
+上面是 pycharm 的菜单栏: 可以完成各种设置功能  
+左面是项目文件显示窗口: 可以创建删除项目文件，了解项目目录结构等  
+右面是代码编辑窗口: 点击项目文件显示窗口中的具体文件，即可再右面的编辑区域进行代码文件的编辑  
+下面是代码运行标准交互窗口: 在代码编辑窗口或者项目显示窗口选中具体的 python 文件后鼠标右键点击运行即可
+![创建新项目设置页面](pycharm07.png)
